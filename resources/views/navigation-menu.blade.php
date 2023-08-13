@@ -15,6 +15,12 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link href="/nova" :active="request()->is('nova*')" target="_blank">
+                        {{ __('Nova') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('event.index') }}" :active="request()->routeIs('event.index')">
+                        {{ __('Events') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -141,6 +147,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/nova" :active="request()->is('nova*')" target="_blank">
+                {{ __('Nova') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('event.index') }}" :active="request()->routeIs('event.index')">
+                {{ __('Events') }}
             </x-responsive-nav-link>
         </div>
 

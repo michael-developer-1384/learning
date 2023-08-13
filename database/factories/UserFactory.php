@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\User;
+use App\Models\Tenant;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
@@ -32,8 +34,12 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
-            'current_team_id' => null,
+            'tenant_id' => null, // You can set a default tenant or leave it null
+            'company_id' => null, // You can set a default company or leave it null
+            'phone' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
+            'date_of_birth' => $this->faker->date(),
+            'role_id' => 4, // You can set a default role or leave it null
         ];
     }
 
