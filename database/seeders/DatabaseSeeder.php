@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         Role::factory(4)->create();
 
         $admin = User::factory()->create([
+            'tenant_id' => 1,
             'name' => 'admin',
             'email' => 'admin@test.com',
             'role_id' => 1,

@@ -66,12 +66,13 @@ class User extends Resource
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
-            BelongsTo::make('Tenant'),
+            BelongsTo::make('Tenant')->onlyOnDetail(),
             BelongsTo::make('Company')->nullable(),
-            Text::make('Phone')->nullable(),
-            Text::make('Address')->nullable(),
-            Date::make('Date Of Birth', 'date_of_birth')->nullable(),
+            Text::make('Phone')->nullable()->onlyOnDetail(),
+            Text::make('Address')->nullable()->onlyOnDetail(),
+            Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
             BelongsTo::make('Role'),
+            BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
         ];
     }
 

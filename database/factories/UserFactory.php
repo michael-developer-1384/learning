@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'tenant_id' => null, // You can set a default tenant or leave it null
             'company_id' => null, // You can set a default company or leave it null
-            'phone' => $this->faker->phoneNumber,
+            'phone' => preg_replace('/\D/', '', $this->faker->phoneNumber),
             'address' => $this->faker->address,
             'date_of_birth' => $this->faker->date(),
             'role_id' => 4, // You can set a default role or leave it null
