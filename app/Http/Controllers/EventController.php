@@ -47,7 +47,26 @@ class EventController extends Controller
         $this->checkForMissingMandatoryFields($importId);
         $this->checkForUpdatedFields($importId);
 
+        return redirect()->route('event.import_results');
+
     }
+
+    public function showImportResults()
+    {
+        // Holen Sie den neuesten Import basierend auf dem angemeldeten Benutzer
+        $latestImportId = ImportedUser::where('created_by_user', auth()->id())->latest('created_at')->first()->import_id;
+        $importedUsers = ImportedUser::where('import_id', $latestImportId)->whereNotNull('test_result')->get();
+    
+        // Gruppieren Sie die Benutzer nach ihrem test_result
+        $groupedUsers = $importedUsers->groupBy('test_result');
+    
+        return view('events.import-results', ['groupedUsers' => $groupedUsers]);
+    }
+
+
+
+
+    // FUNCTIONS
 
     private function checkForEntriesWithoutUserId($importId)
     {
@@ -59,7 +78,6 @@ class EventController extends Controller
             return is_null($importedUser['user_id']);
         })->each(function ($user) {
             $user->update(['test_result' => 'new', 'test_result_description' => 'No ID']);
-            dump($user);
         });
     }
 
@@ -74,7 +92,6 @@ class EventController extends Controller
             if ($usersGroup->count() > 1) {
                 $usersGroup->slice(1)->each(function ($duplicateUser) {
                     $duplicateUser->update(['test_result' => 'invalid', 'test_result_description' => 'Duplicate ID']);
-                    dump($duplicateUser);
                 });
             }
         });
@@ -90,7 +107,6 @@ class EventController extends Controller
             return !is_null($importedUser['user_id']) && is_null(User::find($importedUser['user_id']));
         })->each(function ($user) {
             $user->update(['test_result' => 'invalid', 'test_result_description' => 'Invalid ID']);
-            dump($user);
         });
     }
 
@@ -119,10 +135,9 @@ class EventController extends Controller
                 'company_id' => $user->company_id,
                 'tenant_id' => $user->tenant_id,
                 'test_result' => 'missing',
-                'test_result_description' => 'Existing ID missing',
+                'test_result_description' => 'ID Missing',
                 'user_action' => 'pending'
             ]);
-            dump($missingUser);
         });
     }
 
@@ -156,8 +171,7 @@ class EventController extends Controller
             return !empty($item['missingFields']);
         })->each(function ($item) {
             $description = 'Missing mandatory fields: ' . implode(', ', $item['missingFields']);
-            $item['user']->update(['test_result' => 'invalid', 'test_result_description' => $description]);
-            dump($item['user']);
+            $item['user']->update(['test_result' => 'invalid', 'test_result_description' => ucwords($description)]);
         });
     }
 
@@ -204,8 +218,7 @@ class EventController extends Controller
             return !empty($item['updatedFields']);
         })->each(function ($item) {
             $description = 'Updated fields: ' . implode(', ', $item['updatedFields']);
-            $item['user']->update(['test_result' => 'updated', 'test_result_description' => $description]);
-            //dump($item['user']);
+            $item['user']->update(['test_result' => 'updated', 'test_result_description' => ucwords($description)]);
         });
     }
  
@@ -231,7 +244,7 @@ class EventController extends Controller
                         ->where($columnName, $invalidName)
                         ->update([
                             'test_result' => 'invalid',
-                            'test_result_description' => "Invalid $columnName"
+                            'test_result_description' => "Invalid ".ucwords($columnName)
                         ]);
         }
     }

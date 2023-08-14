@@ -30,5 +30,6 @@ Route::middleware([
 
     Route::get('/events', [EventController::class, 'index'])->name('event.index');
     Route::get('/events/users', [EventController::class, 'exportUsers'])->name('event.export_users');
+    Route::get('/events/import-results', [EventController::class, 'showImportResults'])->name('event.import_results');
     Route::post('/events/users', [EventController::class, 'importUsers'])->name('event.import_users');
 });
