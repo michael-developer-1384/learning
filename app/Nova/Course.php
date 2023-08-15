@@ -5,18 +5,25 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Number;
+
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Tenant extends Resource
+class Course extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Tenant>
+     * @var class-string<\App\Models\Course>
      */
-    public static $model = \App\Models\Tenant::class;
-    public static $group = 'Master Data';
+    public static $model = \App\Models\Course::class;
+    public static $group = 'Learning content';
     public static $priority = 1;
 
     /**
@@ -32,7 +39,7 @@ class Tenant extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name',
     ];
 
     /**
@@ -44,10 +51,30 @@ class Tenant extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            Text::make('Name')->sortable()->rules('required'),
-            HasMany::make('Companies'),
-            HasMany::make('Users'),
+            ID::make(__('ID'), 'id')->sortable(),
+
+            Text::make('Name')->sortable(),
+            Textarea::make('Description')->onlyOnDetail(),
+            Date::make('Valid From', 'valid_from'),
+            Date::make('Valid Until', 'valid_until'),
+            Boolean::make('Is Active', 'is_active'),
+            Boolean::make('Is Mandatory', 'is_mandatory'),
+
+            Number::make('Companies')
+                ->displayUsing(function () {
+                    return $this->companies->count();
+                })->hideWhenCreating()->hideWhenUpdating(),
+
+            Number::make('Chapters')
+                ->displayUsing(function () {
+                    return $this->chapters->count();
+                })->hideWhenCreating()->hideWhenUpdating(),
+
+            BelongsTo::make('Tenant')->onlyOnDetail(),
+            BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
+
+            HasMany::make('Chapters'),
+            BelongsToMany::make('Companies'),
         ];
     }
 

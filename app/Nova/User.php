@@ -21,6 +21,8 @@ class User extends Resource
      * @var class-string<\App\Models\User>
      */
     public static $model = \App\Models\User::class;
+    public static $group = 'Master Data';
+    public static $priority = 3;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

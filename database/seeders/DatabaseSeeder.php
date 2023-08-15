@@ -6,6 +6,9 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Role;
+use App\Models\Course;
+use App\Models\Chapter;
+use App\Models\Lesson;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -46,5 +49,52 @@ class DatabaseSeeder extends Seeder
                 'tenant_id' => 1, 
             ]);
         });
+
+        // Erstellen Sie zuerst 150 Kurse
+        $courses = Course::factory(150)->create(['tenant_id' => 1]);
+
+        $courses->each(function ($course) {
+            $previousChapterId = null;
+            $chapterOrder = 1; // Starten Sie die Reihenfolge der Kapitel bei 1
+
+            for ($i = 0; $i < rand(1, 5); $i++) {
+                $chapter = Chapter::factory()->create([
+                    'course_id' => $course->id,
+                    'tenant_id' => $course->tenant_id,
+                    'previous_chapter_id' => $previousChapterId,
+                    'order' => $chapterOrder, // Setzen Sie die Reihenfolge des Kapitels
+                ]);
+
+                $previousLessonId = null;
+                $lessonOrder = 1; // Starten Sie die Reihenfolge der Lektionen bei 1
+
+                for ($j = 0; $j < rand(3, 6); $j++) {
+                    $lesson = Lesson::factory()->create([
+                        'chapter_id' => $chapter->id,
+                        'tenant_id' => $chapter->tenant_id,
+                        'previous_lesson_id' => $previousLessonId,
+                        'order' => $lessonOrder, // Setzen Sie die Reihenfolge der Lektion
+                    ]);
+
+                    $previousLessonId = $lesson->id;
+                    $lessonOrder++;
+                }
+
+                $previousChapterId = $chapter->id;
+                $chapterOrder++;
+            }
+        });
+
+
+        for ($i = 0; $i < 150; $i++) {
+            // Wählen Sie ein Unternehmen und einen Kurs zufällig aus
+            $company = Company::inRandomOrder()->first();
+            $course = $courses->random();
+        
+            // Fügen Sie den Kurs dem Unternehmen hinzu, wenn er noch nicht zugewiesen wurde
+            if (!$company->courses->contains($course->id)) {
+                $company->courses()->attach($course);
+            }
+        }
     }
 }

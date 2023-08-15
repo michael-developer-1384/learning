@@ -16,6 +16,8 @@ class Role extends Resource
      * @var class-string<\App\Models\Role>
      */
     public static $model = \App\Models\Role::class;
+    public static $group = 'Master Data';
+    public static $priority = 4;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

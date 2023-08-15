@@ -17,6 +17,9 @@ class Company extends Resource
      * @var class-string<\App\Models\Company>
      */
     public static $model = \App\Models\Company::class;
+    public static $group = 'Master Data';
+    public static $priority = 2;
+
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -53,6 +56,7 @@ class Company extends Resource
             Text::make('Address')->nullable(),
             Text::make('Phone')->nullable(),
             HasMany::make('Users'),
+            HasMany::make('Courses'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
         ];
     }

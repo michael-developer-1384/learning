@@ -31,6 +31,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ->register();
     }
 
+
     /**
      * Register the Nova gate.
      *
@@ -76,6 +77,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function register()
     {
-        //
+        Nova::sortResourcesBy(function ($resource) {
+            return $resource::$priority ?? 99999;
+        });
     }
 }

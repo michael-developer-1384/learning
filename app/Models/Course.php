@@ -2,44 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 
-class Company extends Model
+class Course extends Model
 {
     use HasFactory;
-    
-    protected $fillable = [
-        'tenant_id',
-        'name',
-        'description',
-        'email',
-        'phone',
-        'address',
-    ];
+
+    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by_user'];
 
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_user');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function courses()
+    public function companies()
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Company::class);
     }
 
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class)->orderBy('order', 'asc');
+    }
+
+    protected $casts = [
+        'valid_from' => 'datetime',
+        'valid_until' => 'datetime',
+    ];
 
     protected static function booted()
     {
@@ -58,5 +55,4 @@ class Company extends Model
             }
         });
     }
-
 }

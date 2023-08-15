@@ -5,19 +5,25 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToThrough;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Tenant extends Resource
+class Lesson extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Tenant>
+     * @var class-string<\App\Models\Lesson>
      */
-    public static $model = \App\Models\Tenant::class;
-    public static $group = 'Master Data';
-    public static $priority = 1;
+    public static $model = \App\Models\Lesson::class;
+    public static $group = 'Learning content';
+    public static $priority = 3;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +38,7 @@ class Tenant extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name', 'order'
     ];
 
     /**
@@ -44,10 +50,19 @@ class Tenant extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            Text::make('Name')->sortable()->rules('required'),
-            HasMany::make('Companies'),
-            HasMany::make('Users'),
+            ID::make(__('ID'), 'id')->sortable(),
+
+            Text::make('Name')->sortable(),
+            Textarea::make('Description'),
+            Date::make('Valid From', 'valid_from'),
+            Date::make('Valid Until', 'valid_until'),
+            Boolean::make('Is Active', 'is_active'),
+            Boolean::make('Is Mandatory', 'is_mandatory'),
+            Number::make('Order')->onlyOnDetail(),
+            Select::make('Content Type', 'content_type')->options(\App\Models\Lesson::CONTENT_TYPES),
+
+            BelongsTo::make('Previous Lesson', 'previousLesson', Lesson::class)->onlyOnDetail(),  
+            BelongsTo::make('Chapter'),
         ];
     }
 
