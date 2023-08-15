@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
+use Spatie\Tags\HasTags;
 
 
 class User extends Authenticatable
@@ -20,6 +21,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasTags;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +39,7 @@ class User extends Authenticatable
         'date_of_birth',
         'current_team_id',
         'profile_photo_path',
+        'tags',
     ];
 
     /**

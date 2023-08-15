@@ -78,6 +78,7 @@ class User extends Resource
             BelongsTo::make('Company')->nullable(),
             Text::make('Phone')->nullable()->onlyOnDetail(),
             Text::make('Address')->nullable()->onlyOnDetail(),
+            Text::make('Tags'),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
             BelongsToMany::make('Roles'),
             BelongsToMany::make('LearningTypes'),
