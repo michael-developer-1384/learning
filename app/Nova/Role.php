@@ -49,7 +49,7 @@ class Role extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name')->sortable()->rules('required'),
-            HasMany::make('Users'),
+            BelongsToMany::make('Users'),
             BelongsToMany::make('Permissions')
                 ->fields(function () {
                     return [

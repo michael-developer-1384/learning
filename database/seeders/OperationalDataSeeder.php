@@ -6,6 +6,8 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\LearningType;
+use App\Models\ContentType;
 
 use Illuminate\Database\Seeder;
 
@@ -52,20 +54,25 @@ class OperationalDataSeeder extends Seeder
             Permission::create($permission);
         }
 
-        // Liste der Rollen
-        $roles = [
-            'System-Administrator',
-            'Administrator',
-            'Editor',
-            'Author',
-            'Student',
-            'Guest',
-        ];
 
-        // Erstellen Sie jede Rolle
-        foreach ($roles as $roleName) {
-            Role::create(['name' => $roleName]);
+        foreach (Role::ROLE_NAMES as $role) {
+            Role::create(['name' => $role]);
         }
+
+        foreach (LearningType::LEARNING_TYPES as $type => $isActive) {
+            LearningType::create([
+                'name' => $type,
+                'is_active' => $isActive
+            ]);
+        }
+
+
+
+
+
+
+
+
 
         Tenant::factory()->create([
             'name' => 'SHD',

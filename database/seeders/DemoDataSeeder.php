@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Course;
 use App\Models\Chapter;
 use App\Models\Lesson;
+use App\Models\LearningType;
 
 use Illuminate\Database\Seeder;
 
@@ -45,9 +46,15 @@ class DemoDataSeeder extends Seeder
             ]);
 
             $studentRoleId = Role::where('name', 'Student')->firstOrFail()->id;
+            
+            // Holen Sie alle aktiven Lerntypen
+            $learningTypes = LearningType::where('is_active', true)->get();
 
             foreach ($users as $user) {
                 $user->roles()->attach($studentRoleId);
+
+                $randomLearningTypes = $learningTypes->random(rand(1, $learningTypes->count()));
+                $user->learningTypes()->attach($randomLearningTypes);
             }
         });
 

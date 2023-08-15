@@ -79,14 +79,15 @@ class User extends Resource
             Text::make('Phone')->nullable()->onlyOnDetail(),
             Text::make('Address')->nullable()->onlyOnDetail(),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
-            HasMany::make('Roles'),
+            BelongsToMany::make('Roles'),
+            BelongsToMany::make('LearningTypes'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
 
             Text::make('Roles')
                 ->displayUsing(function () {
                     return $this->roles->pluck('name')->implode(', ');
                 })
-                ->exceptOnForms(),
+                ->onlyOnIndex(),
         ];
     }
 

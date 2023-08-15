@@ -5,22 +5,19 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Company extends Resource
+class LearningType extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Company>
+     * @var class-string<\App\Models\LearningType>
      */
-    public static $model = \App\Models\Company::class;
-    public static $group = 'Operational Data';
-    public static $priority = 2;
-
+    public static $model = \App\Models\LearningType::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,7 +32,7 @@ class Company extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name',
     ];
 
     /**
@@ -48,17 +45,10 @@ class Company extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('Tenant')->onlyOnDetail(),
             Text::make('Name')->sortable()->rules('required'),
-            Text::make('Description')->nullable()->onlyOnDetail(),
-            Text::make('Email')->onlyOnDetail()->sortable()->rules('nullable', 'email', 'max:254')
-                ->creationRules('unique:companies,email')
-                ->updateRules('unique:companies,email,{{resourceId}}'),
-            Text::make('Address')->nullable(),
-            Text::make('Phone')->nullable(),
-            HasMany::make('Users'),
-            BelongsToMany::make('Courses'),
-            BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
+            Textarea::make('Description')->rows(3),
+            Boolean::make('Is Active', 'is_active')->sortable(),
+            BelongsToMany::make('Users'),
         ];
     }
 

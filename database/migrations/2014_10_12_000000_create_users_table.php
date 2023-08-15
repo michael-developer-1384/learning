@@ -26,7 +26,6 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->text('tags')->nullable();
-            $table->enum('learning_type', ['Visual', 'Auditory', 'Kinesthetic', 'Reading/Writing']); // Beispielwerte
         
             $table->timestamps();
 

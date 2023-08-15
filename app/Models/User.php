@@ -85,14 +85,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function learningTypes()
+    {
+        return $this->belongsToMany(LearningType::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_user');
-    }
-
-    public function getLearningTypeAttribute($value)
-    {
-        return ucfirst($value);
     }
     
     protected static function booted()
