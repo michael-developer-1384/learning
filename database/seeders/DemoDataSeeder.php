@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\Chapter;
 use App\Models\Lesson;
 use App\Models\LearningType;
+use App\Models\ContentType;
 
 use Illuminate\Database\Seeder;
 
@@ -79,11 +80,15 @@ class DemoDataSeeder extends Seeder
                 $lessonOrder = 1; // Starten Sie die Reihenfolge der Lektionen bei 1
 
                 for ($j = 0; $j < rand(3, 6); $j++) {
+                    // Wählen Sie einen zufälligen content_type aus
+                    $randomContentType = ContentType::inRandomOrder()->where('is_active', true)->first();
+
                     $lesson = Lesson::factory()->create([
                         'chapter_id' => $chapter->id,
                         'tenant_id' => $chapter->tenant_id,
                         'previous_lesson_id' => $previousLessonId,
-                        'order' => $lessonOrder, // Setzen Sie die Reihenfolge der Lektion
+                        'order' => $lessonOrder,
+                        'content_type_id' => $randomContentType->id,
                     ]);
 
                     $previousLessonId = $lesson->id;

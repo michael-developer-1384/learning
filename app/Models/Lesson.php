@@ -11,9 +11,7 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'order', 'tenant_id', 'previous_lesson_id', 'must_complete_previous', 'content_type', 'chapter_id', 'created_by_user'];
-
-    const CONTENT_TYPES = ['SCORM', 'Powerpoint', 'PDF', 'Video', 'Webinar', 'Training'];
+    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'order', 'tenant_id', 'previous_lesson_id', 'must_complete_previous', 'chapter_id', 'created_by_user'];
 
     public function chapter()
     {
@@ -38,6 +36,11 @@ class Lesson extends Model
     public function subsequentLessons()
     {
         return $this->hasMany(Lesson::class, 'previous_lesson_id');
+    }
+    
+    public function contentType()
+    {
+        return $this->belongsTo(ContentType::class);
     }
 
     protected $casts = [

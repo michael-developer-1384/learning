@@ -66,6 +66,14 @@ class OperationalDataSeeder extends Seeder
             ]);
         }
 
+        foreach (ContentType::CONTENT_TYPES as $type => $isActive) {
+            ContentType::create([
+                'name' => $type,
+                'is_active' => $isActive
+            ]);
+        }
+
+
 
 
 

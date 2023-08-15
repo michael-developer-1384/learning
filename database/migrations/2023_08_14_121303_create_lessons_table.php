@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('chapter_id');
             $table->unsignedBigInteger('tenant_id');
+            $table->unsignedBigInteger('content_type_id');
             $table->unsignedBigInteger('created_by_user')->nullable();
             $table->string('name');
             $table->text('description');
@@ -24,11 +25,11 @@ return new class extends Migration
             $table->boolean('is_mandatory')->default(false);
             $table->unsignedBigInteger('previous_lesson_id')->nullable();
             $table->boolean('must_complete_previous')->default(false);
-            $table->enum('content_type', ['SCORM', 'Powerpoint', 'PDF', 'Video', 'Webinar', 'Training']);
             $table->integer('order')->default(0);
             $table->timestamps();
         
             $table->foreign('chapter_id')->references('id')->on('chapters');
+            $table->foreign('content_type_id')->references('id')->on('content_types');
             $table->foreign('previous_lesson_id')->references('id')->on('lessons');
             $table->foreign('created_by_user')->references('id')->on('users');
         });

@@ -6,24 +6,19 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToThrough;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Lesson extends Resource
+class ContentType extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Lesson>
+     * @var class-string<\App\Models\ContentType>
      */
-    public static $model = \App\Models\Lesson::class;
-    public static $group = 'Learning content';
-    public static $priority = 3;
+    public static $model = \App\Models\ContentType::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -38,7 +33,7 @@ class Lesson extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'order'
+        'id', 'name',
     ];
 
     /**
@@ -50,19 +45,11 @@ class Lesson extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-
-            Text::make('Name')->sortable(),
-            Textarea::make('Description'),
-            Date::make('Valid From', 'valid_from'),
-            Date::make('Valid Until', 'valid_until'),
-            Boolean::make('Is Active', 'is_active'),
-            Boolean::make('Is Mandatory', 'is_mandatory'),
-            Number::make('Order')->onlyOnDetail(),
-
-            BelongsTo::make('Previous Lesson', 'previousLesson', Lesson::class)->onlyOnDetail(),  
-            BelongsTo::make('Chapter'),
-            BelongsTo::make('ContentType'),
+            ID::make()->sortable(),
+            Text::make('Name')->sortable()->rules('required'),
+            Textarea::make('Description')->rows(3),
+            Boolean::make('Is Active', 'is_active')->sortable(),
+            HasMany::make('Lessons'),
         ];
     }
 
