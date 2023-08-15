@@ -38,9 +38,9 @@ class Lesson extends Model
         return $this->hasMany(Lesson::class, 'previous_lesson_id');
     }
     
-    public function contentType()
+    public function contentTypes()
     {
-        return $this->belongsTo(ContentType::class);
+        return $this->belongsToMany(ContentType::class);
     }
 
     protected $casts = [

@@ -22,6 +22,6 @@ class ContentType extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class);
     }
 }

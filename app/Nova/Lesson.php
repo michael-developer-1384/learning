@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\BelongsToThrough;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -62,7 +63,7 @@ class Lesson extends Resource
 
             BelongsTo::make('Previous Lesson', 'previousLesson', Lesson::class)->onlyOnDetail(),  
             BelongsTo::make('Chapter'),
-            BelongsTo::make('ContentType'),
+            BelongsToMany::make('ContentTypes')
         ];
     }
 

@@ -49,7 +49,7 @@ class ContentType extends Resource
             Text::make('Name')->sortable()->rules('required'),
             Textarea::make('Description')->rows(3),
             Boolean::make('Is Active', 'is_active')->sortable(),
-            HasMany::make('Lessons'),
+            BelongsToMany::make('Lessons')
         ];
     }
 

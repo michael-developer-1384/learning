@@ -23,7 +23,6 @@ class LessonFactory extends Factory
             'is_active' => $this->faker->boolean,
             'is_mandatory' => $this->faker->boolean,
             'order' => $this->faker->randomDigit,
-            'content_type_id' => null,
         ];
     }
 }

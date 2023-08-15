@@ -80,15 +80,12 @@ class DemoDataSeeder extends Seeder
                 $lessonOrder = 1; // Starten Sie die Reihenfolge der Lektionen bei 1
 
                 for ($j = 0; $j < rand(3, 6); $j++) {
-                    // Wählen Sie einen zufälligen content_type aus
-                    $randomContentType = ContentType::inRandomOrder()->where('is_active', true)->first();
-
+                    
                     $lesson = Lesson::factory()->create([
                         'chapter_id' => $chapter->id,
                         'tenant_id' => $chapter->tenant_id,
                         'previous_lesson_id' => $previousLessonId,
                         'order' => $lessonOrder,
-                        'content_type_id' => $randomContentType->id,
                     ]);
 
                     $previousLessonId = $lesson->id;
@@ -100,6 +97,14 @@ class DemoDataSeeder extends Seeder
             }
         });
 
+        $activeContentTypes = ContentType::where('is_active', true)->get();
+
+        // Für jede Lesson 1 bis 3 zufällige aktive ContentTypes zuweisen
+        $lessons = Lesson::all();
+        foreach ($lessons as $lesson) {
+            $randomContentTypes = $activeContentTypes->random(rand(1, 3));
+            $lesson->contentTypes()->attach($randomContentTypes);
+        }
 
         for ($i = 0; $i < 150; $i++) {
             // Wählen Sie ein Unternehmen und einen Kurs zufällig aus
