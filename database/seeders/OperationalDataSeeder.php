@@ -54,7 +54,6 @@ class OperationalDataSeeder extends Seeder
             Permission::create($permission);
         }
 
-
         foreach (Role::ROLE_NAMES as $role) {
             Role::create(['name' => $role]);
         }

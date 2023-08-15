@@ -10,6 +10,7 @@ use App\Models\Chapter;
 use App\Models\Lesson;
 use App\Models\LearningType;
 use App\Models\ContentType;
+use App\Models\Department;
 
 use Illuminate\Database\Seeder;
 
@@ -40,7 +41,7 @@ class DemoDataSeeder extends Seeder
             $user->roles()->attach(Role::where('name', 'Author')->firstOrFail()->id);
 
             // Erstellen Sie zwischen 5 und 100 Benutzer für die Firma mit der Rolle "Student"
-            $usersCount = rand(5, 100);
+            $usersCount = rand(3, 15);
             $users = User::factory($usersCount)->create([
                 'company_id' => $company->id,
                 'tenant_id' => 1, 
@@ -56,6 +57,13 @@ class DemoDataSeeder extends Seeder
 
                 $randomLearningTypes = $learningTypes->random(rand(1, $learningTypes->count()));
                 $user->learningTypes()->attach($randomLearningTypes);
+
+                // Holen Sie alle Abteilungen für den aktuellen Mandanten
+                $departments = Department::where('tenant_id', $user->tenant_id)->get();
+
+                // Wählen Sie zwischen 0 und 2 Abteilungen zufällig aus
+                $randomDepartments = $departments->random(rand(0, 2));
+                $user->departments()->attach($randomDepartments);
             }
         });
 

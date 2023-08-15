@@ -4,20 +4,21 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Tenant extends Resource
+class Department extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Tenant>
+     * @var class-string<\App\Models\Department>
      */
-    public static $model = \App\Models\Tenant::class;
-    public static $group = 'Operational Data';
-    public static $priority = 1;
+    public static $model = \App\Models\Department::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -45,10 +46,15 @@ class Tenant extends Resource
     {
         return [
             ID::make()->sortable(),
+            BelongsTo::make('Tenant'),
             Text::make('Name')->sortable()->rules('required'),
-            HasMany::make('Companies'),
-            HasMany::make('Users'),
-            HasMany::make('Departments'),
+            Textarea::make('Description')->nullable(),
+            BelongsToMany::make('Users', 'users', User::class),
+
+            Number::make('Users')
+                ->displayUsing(function () {
+                    return $this->users->count();
+                })->hideWhenCreating()->hideWhenUpdating(),
         ];
     }
 

@@ -25,4 +25,22 @@ class Tenant extends Model
     {
         return $this->hasMany(Company::class);
     }
+
+    
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($tenant) {
+            foreach (Department::DEPARTMENT_NAMES as $name) {
+                Department::create([
+                    'name' => $name,
+                    'tenant_id' => $tenant->id
+                ]);
+            }
+        });
+    }
 }

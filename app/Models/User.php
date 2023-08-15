@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $this->belongsToMany(LearningType::class);
     }
 
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_user');
