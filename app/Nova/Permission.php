@@ -2,25 +2,27 @@
 
 namespace App\Nova;
 
+use App\Models\Permission as PermissionModel;
+
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsToMany;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Role extends Resource
+class Permission extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Role>
+     * @var class-string<\App\Models\Permission>
      */
-    public static $model = \App\Models\Role::class;
+    public static $model = \App\Models\Permission::class;
     public static $group = 'Operational Data';
-    public static $priority = 4;
+    public static $priority = 5;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,7 +37,7 @@ class Role extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name',
     ];
 
     /**
@@ -44,18 +46,30 @@ class Role extends Resource
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(NovaRequest $request)
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')->sortable()->rules('required'),
-            HasMany::make('Users'),
-            BelongsToMany::make('Permissions')
-                ->fields(function () {
-                    return [
-                        Boolean::make('Is Active'),
-                    ];
-                }),
+
+            Text::make('Name')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Text::make('Description')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Select::make('Category')
+                ->options(array_combine(PermissionModel::CATEGORIES, PermissionModel::CATEGORIES))
+                ->sortable()
+                ->rules('required'),
+            
+                BelongsToMany::make('Roles')
+                        ->fields(function () {
+                            return [
+                                Boolean::make('Is Active'),
+                            ];
+                        }),
         ];
     }
 

@@ -17,7 +17,7 @@ class Company extends Resource
      * @var class-string<\App\Models\Company>
      */
     public static $model = \App\Models\Company::class;
-    public static $group = 'Master Data';
+    public static $group = 'Operational Data';
     public static $priority = 2;
 
 

@@ -35,7 +35,6 @@ class User extends Authenticatable
         'phone',
         'address',
         'date_of_birth',
-        'role_id',
         'current_team_id',
         'profile_photo_path',
     ];
@@ -81,14 +80,19 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsToMany(Role::class);
     }
 
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_user');
+    }
+
+    public function getLearningTypeAttribute($value)
+    {
+        return ucfirst($value);
     }
     
     protected static function booted()

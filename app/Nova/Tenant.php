@@ -16,7 +16,7 @@ class Tenant extends Resource
      * @var class-string<\App\Models\Tenant>
      */
     public static $model = \App\Models\Tenant::class;
-    public static $group = 'Master Data';
+    public static $group = 'Operational Data';
     public static $priority = 1;
 
     /**

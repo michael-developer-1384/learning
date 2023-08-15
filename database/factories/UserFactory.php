@@ -39,7 +39,6 @@ class UserFactory extends Factory
             'phone' => preg_replace('/\D/', '', $this->faker->phoneNumber),
             'address' => $this->faker->address,
             'date_of_birth' => $this->faker->date(),
-            'role_id' => 4, // You can set a default role or leave it null
         ];
     }
 

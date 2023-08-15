@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
@@ -21,8 +22,12 @@ class User extends Resource
      * @var class-string<\App\Models\User>
      */
     public static $model = \App\Models\User::class;
-    public static $group = 'Master Data';
+    public static $group = 'Operational Data';
     public static $priority = 3;
+
+    public static $sort = [
+        'id' => 'asc'
+    ];
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -49,7 +54,7 @@ class User extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make()->sortable('asc'),
 
             Gravatar::make()->maxWidth(50),
 
@@ -61,6 +66,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
+                ->onlyOnDetail()
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
             Password::make('Password')
@@ -73,8 +79,14 @@ class User extends Resource
             Text::make('Phone')->nullable()->onlyOnDetail(),
             Text::make('Address')->nullable()->onlyOnDetail(),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
-            BelongsTo::make('Role'),
+            HasMany::make('Roles'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
+
+            Text::make('Roles')
+                ->displayUsing(function () {
+                    return $this->roles->pluck('name')->implode(', ');
+                })
+                ->exceptOnForms(),
         ];
     }
 
@@ -121,4 +133,17 @@ class User extends Resource
     {
         return [];
     }
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        if (empty($request->get('orderBy'))) {
+            $query->getQuery()->orders = [];
+
+            return $query->orderBy(key(static::$sort), reset(static::$sort));
+        }
+
+        return $query;
+    }
+
+    
 }

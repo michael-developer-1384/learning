@@ -10,11 +10,17 @@ class Role extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', // Beispiel für ein Attribut
+        'name', 'category', 'description'
     ];
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class)->withPivot('is_active');
+    }
+    
 }

@@ -33,6 +33,11 @@ class Course extends Model
         return $this->hasMany(Chapter::class)->orderBy('order', 'asc');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     protected $casts = [
         'valid_from' => 'datetime',
         'valid_until' => 'datetime',

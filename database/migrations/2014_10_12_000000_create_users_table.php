@@ -25,10 +25,11 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->unsignedBigInteger('role_id')->nullable(); 
+            $table->text('tags')->nullable();
+            $table->enum('learning_type', ['Visual', 'Auditory', 'Kinesthetic', 'Reading/Writing']); // Beispielwerte
+        
             $table->timestamps();
 
-            $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->foreign('company_id')->references('id')->on('companies');
         });
