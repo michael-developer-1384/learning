@@ -14,6 +14,8 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.11",
         "maatwebsite/excel": "^3.1",
+        "roach-php/core": "^2.0",
+        "roach-php/laravel": "^2.0",
         "spatie/nova-tags-field": "^4.0"
     },
     "require-dev": {
