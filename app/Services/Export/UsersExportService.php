@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Services\Export;
 
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class UsersExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithColumnFormatting
+class UsersExportService implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
 
     /**
@@ -22,7 +22,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
      */
     public function collection()
     {
-        return User::with('company', 'role')->get();
+        return User::with('company', 'roles')->get();
     }
 
     /**
@@ -40,7 +40,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             'Address',
             'Date of Birth',
             'Company Name',
-            'Role Name',
+            'Role Names',
         ];
     }
 
@@ -60,7 +60,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             $user->address,
             $user->date_of_birth ? $user->date_of_birth->format('d.m.Y') : null,
             $user->company->name ?? '', // Falls keine Company zugeordnet ist, wird ein leerer String zurückgegeben
-            $user->role->name ?? '', // Falls keine Rolle zugeordnet ist, wird ein leerer String zurückgegeben
+            implode(', ', $user->roles->pluck('name')->toArray()) ?? '', // Liste aller Rollennamen
         ];
     }
 

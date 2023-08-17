@@ -23,7 +23,7 @@ class User extends Resource
      */
     public static $model = \App\Models\User::class;
     public static $group = 'Operational Data';
-    public static $priority = 3;
+    public static $priority = 5;
 
     public static $sort = [
         'id' => 'asc'
@@ -82,7 +82,6 @@ class User extends Resource
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
             BelongsToMany::make('Roles'),
             BelongsToMany::make('LearningTypes'),
-            BelongsToMany::make('Departments'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
 
             Text::make('Roles')
@@ -90,6 +89,22 @@ class User extends Resource
                     return $this->roles->pluck('name')->implode(', ');
                 })
                 ->onlyOnIndex(),
+                
+            BelongsToMany::make('Positions')
+                ->fields(function () {
+                    return [
+                        Date::make('Start Date', 'start_date')
+                            ->sortable()
+                    ];
+                }),
+            
+            BelongsToMany::make('Departments')
+                ->fields(function () {
+                    return [
+                        Date::make('Start Date', 'start_date')
+                            ->sortable()
+                    ];
+                }),
         ];
     }
 

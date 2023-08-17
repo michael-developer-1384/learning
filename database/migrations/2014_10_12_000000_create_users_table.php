@@ -26,6 +26,7 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->text('tags')->nullable();
+            $table->date('start_date')->nullable();
         
             $table->timestamps();
 

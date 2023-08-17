@@ -22,7 +22,7 @@ class Permission extends Resource
      */
     public static $model = \App\Models\Permission::class;
     public static $group = 'Operational Data';
-    public static $priority = 5;
+    public static $priority = 7;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

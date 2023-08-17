@@ -54,11 +54,12 @@ class Course extends Resource
             ID::make(__('ID'), 'id')->sortable(),
 
             Text::make('Name')->sortable(),
-            Textarea::make('Description')->onlyOnDetail(),
+            Textarea::make('Description'),
             Date::make('Valid From', 'valid_from'),
             Date::make('Valid Until', 'valid_until'),
             Boolean::make('Is Active', 'is_active'),
             Boolean::make('Is Mandatory', 'is_mandatory'),
+            BelongsTo::make('Tenant'),
 
             Number::make('Companies')
                 ->displayUsing(function () {
@@ -70,7 +71,6 @@ class Course extends Resource
                     return $this->chapters->count();
                 })->hideWhenCreating()->hideWhenUpdating(),
 
-            BelongsTo::make('Tenant')->onlyOnDetail(),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
 
             HasMany::make('Chapters'),

@@ -36,6 +36,10 @@ class Department extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('start_date');
     }
+
+    protected $casts = [
+        'start_date' => 'date',
+    ];
 }

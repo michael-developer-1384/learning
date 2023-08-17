@@ -41,6 +41,13 @@ class Tenant extends Model
                     'tenant_id' => $tenant->id
                 ]);
             }
+            
+            foreach (Position::POSITION_NAMES as $positionName) {
+                Position::create([
+                    'name' => $positionName,
+                    'tenant_id' => $tenant->id
+                ]);
+            }
         });
     }
 }

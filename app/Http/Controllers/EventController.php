@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
-use App\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -23,7 +21,7 @@ class EventController extends Controller
 
     public function exportUsers()
     {
-        return Excel::download(new UsersExport, 'users.xlsx');
+        return Excel::download(new \App\Services\Export\UsersExportService, 'users.xlsx');
     }
 
     public function importUsers(Request $request)

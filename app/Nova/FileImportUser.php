@@ -4,30 +4,24 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Department extends Resource
+class FileImportUser extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Department>
+     * @var class-string<\App\Models\FileImportUser>
      */
-    public static $model = \App\Models\Department::class;
+    public static $model = \App\Models\FileImportUser::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
-    public static $group = 'Operational Data';
-    public static $priority = 3;
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -48,15 +42,12 @@ class Department extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('Tenant'),
-            Text::make('Name')->sortable()->rules('required'),
-            Textarea::make('Description')->nullable(),
-            BelongsToMany::make('Users', 'users', User::class),
+            Text::make('Name'),
+            Text::make('Company Name'),
+            Text::make('Role Names'),
+            Text::make('Test Result'),
+            Text::make('Test Result Description'),
 
-            Number::make('Users')
-                ->displayUsing(function () {
-                    return $this->users->count();
-                })->hideWhenCreating()->hideWhenUpdating(),
         ];
     }
 

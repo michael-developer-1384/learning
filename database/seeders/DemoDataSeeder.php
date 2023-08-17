@@ -11,6 +11,7 @@ use App\Models\Lesson;
 use App\Models\LearningType;
 use App\Models\ContentType;
 use App\Models\Department;
+use App\Models\Position;
 
 use Illuminate\Database\Seeder;
 
@@ -64,6 +65,13 @@ class DemoDataSeeder extends Seeder
                 // Wählen Sie zwischen 0 und 2 Abteilungen zufällig aus
                 $randomDepartments = $departments->random(rand(0, 2));
                 $user->departments()->attach($randomDepartments);
+
+                // Holen Sie alle Positions für den aktuellen Mandanten
+                $positions = Position::where('tenant_id', $user->tenant_id)->get();
+
+                // Wählen Sie zwischen 1 und 2 Positions zufällig aus
+                $randomPositions = $positions->random(rand(0, 2));
+                $user->positions()->attach($randomPositions);
             }
         });
 

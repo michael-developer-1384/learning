@@ -20,7 +20,7 @@ class Role extends Resource
      */
     public static $model = \App\Models\Role::class;
     public static $group = 'Operational Data';
-    public static $priority = 4;
+    public static $priority = 6;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

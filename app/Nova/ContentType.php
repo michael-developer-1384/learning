@@ -19,6 +19,8 @@ class ContentType extends Resource
      * @var class-string<\App\Models\ContentType>
      */
     public static $model = \App\Models\ContentType::class;
+    public static $group = 'Learning content';
+    public static $priority = 5;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

@@ -40,6 +40,7 @@ class User extends Authenticatable
         'current_team_id',
         'profile_photo_path',
         'tags',
+        'start_date',
     ];
 
     /**
@@ -62,6 +63,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'date_of_birth' => 'date',
+        'start_date' => 'date',
     ];
 
     /**
@@ -95,7 +97,12 @@ class User extends Authenticatable
 
     public function departments()
     {
-        return $this->belongsToMany(Department::class);
+        return $this->belongsToMany(Department::class)->withPivot('start_date');
+    }
+
+    public function positions()
+    {
+        return $this->belongsToMany(Position::class)->withPivot('start_date');
     }
 
     public function createdBy()
