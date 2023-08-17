@@ -1,5 +1,7 @@
 <?php
 
+//php artisan roach:run WisIhkSpider
+
 namespace App\Spiders;
 
 use Generator;

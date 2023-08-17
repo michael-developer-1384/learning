@@ -9,29 +9,20 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Number;
-
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Course extends Resource
+class LearningPath extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Course>
+     * @var class-string<\App\Models\LearningPath>
      */
-    public static $model = \App\Models\Course::class;
+    public static $model = \App\Models\LearningPath::class;
     public static $group = 'Learning content';
-    public static $priority = 1;
-
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
     public static $title = 'name';
+    public static $priority = 0;
 
     /**
      * The columns that should be searched.
@@ -59,23 +50,10 @@ class Course extends Resource
             Date::make('Valid Until', 'valid_until'),
             Boolean::make('Is Active', 'is_active'),
             Boolean::make('Is Mandatory', 'is_mandatory'),
-            BelongsTo::make('Tenant')->hideFromIndex(),
-
-            Number::make('Companies')
-                ->displayUsing(function () {
-                    return $this->companies->count();
-                })->hideWhenCreating()->hideWhenUpdating(),
-
-            Number::make('Chapters')
-                ->displayUsing(function () {
-                    return $this->chapters->count();
-                })->hideWhenCreating()->hideWhenUpdating(),
-
+            BelongsTo::make('Tenant'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
 
-            BelongsTo::make('Learning Path')->hideFromIndex(),
-            HasMany::make('Chapters')->hideFromIndex(),
-            BelongsToMany::make('Companies')->hideFromIndex(),
+            BelongsToMany::make('Courses'),
         ];
     }
 

@@ -12,6 +12,7 @@ use App\Models\LearningType;
 use App\Models\ContentType;
 use App\Models\Department;
 use App\Models\Position;
+use App\Models\LearningPath;
 
 use Illuminate\Database\Seeder;
 
@@ -131,6 +132,16 @@ class DemoDataSeeder extends Seeder
             if (!$company->courses->contains($course->id)) {
                 $company->courses()->attach($course);
             }
+        }
+
+        // Create Learning Paths
+        $learningPaths = LearningPath::factory(10)->create(['tenant_id' => 1]);
+
+        $courses = Course::all();
+
+        foreach ($learningPaths as $learningPath) {
+            $randomCourses = $courses->random(rand(1, 5));
+            $learningPath->courses()->attach($randomCourses);
         }
     }
 }
