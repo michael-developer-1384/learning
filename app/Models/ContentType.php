@@ -20,8 +20,9 @@ class ContentType extends Model
         'Training' => true
     ];
 
-    public function lessons()
+    public function modules()
     {
-        return $this->belongsToMany(Lesson::class);
+        return $this->belongsToMany(Module::class)
+                    ->withPivot('is_assigned_to_module');
     }
 }

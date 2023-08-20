@@ -18,7 +18,7 @@ class LearningType extends Resource
      * @var class-string<\App\Models\LearningType>
      */
     public static $model = \App\Models\LearningType::class;
-    public static $group = 'Learning content';
+    public static $group = 'Types';
     public static $priority = 4;
 
     /**

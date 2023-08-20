@@ -5,25 +5,31 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\MorphToMany;
-
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Course extends Resource
+use App\Nova\Lenses\Paths;
+use App\Nova\Lenses\Courses;
+use App\Nova\Lenses\Chapters;
+use App\Nova\Lenses\Lessons;
+use App\Nova\Lenses\Tests;
+
+
+class Module extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Course>
+     * @var class-string<\App\Models\Module>
      */
-    public static $model = \App\Models\Course::class;
-    public static $group = 'Learning content';
+    public static $model = \App\Models\Module::class;
+    public static $group = 'Learning Content';
     public static $priority = 1;
 
     /**
@@ -39,7 +45,7 @@ class Course extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name',
+        'id',
     ];
 
     /**
@@ -51,23 +57,36 @@ class Course extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+            ID::make(__('ID'), 'id')->sortable(),
 
-            ID::make()->sortable(),
-            Text::make('Name'),
-            Textarea::make('Description'),
-            Date::make('Valid From', 'valid_from'),
-            Date::make('Valid Until', 'valid_until'),
-            Boolean::make('Is Active', 'is_active'),
-            Boolean::make('Is Mandatory', 'is_mandatory'),/* 
-            MorphToMany::make('Paths', 'paths', Path::class),
-            MorphToMany::make('Chapters', 'children', Chapter::class), */
+            Text::make('Name')->sortable(),
+
+            Select::make('Category')
+                    ->options(array_combine(\App\Models\Module::LEARNING_CATEGORIES, \App\Models\Module::LEARNING_CATEGORIES))
+                    ->sortable()
+                    ->rules('required', 'in:' . implode(',', \App\Models\Module::LEARNING_CATEGORIES)),
+        
+            Text::make('Description')->sortable()->hideFromIndex(),
+
             BelongsTo::make('Tenant')->hideFromIndex(),
-            /* BelongsToMany::make('Companies')->hideFromIndex(),
 
-            Number::make('Companies')
-                ->displayUsing(function () {
-                    return $this->companies->count();
-                })->hideWhenCreating()->hideWhenUpdating(), */
+            BelongsToMany::make('Parent Modules', 'parents', Module::class)
+                ->fields(function () {
+                    return [
+                        Number::make('Sort Order', 'sort_order')->sortable(),
+                        Boolean::make('Is Active', 'is_active_relation')
+                    ];
+                }),
+
+            BelongsToMany::make('Child Modules', 'children', Module::class)
+                ->fields(function () {
+                    return [
+                        Number::make('Sort Order', 'sort_order')->sortable(),
+                        Boolean::make('Is Active', 'is_active_relation')
+                    ];
+                }),
+
+            BelongsToMany::make('Content Types', 'contentTypes', ContentType::class),
         ];
     }
 
@@ -101,7 +120,13 @@ class Course extends Resource
      */
     public function lenses(NovaRequest $request)
     {
-        return [];
+        return [
+            new Paths,
+            new Courses,
+            new Chapters,
+            new Lessons,
+            new Tests,
+        ];
     }
 
     /**

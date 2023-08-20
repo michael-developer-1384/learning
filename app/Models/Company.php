@@ -32,12 +32,7 @@ class Company extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_user');
-    }
-
-    public function courses()
-    {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 
 
@@ -45,7 +40,7 @@ class Company extends Model
     {
         static::creating(function ($model) {
             if (auth()->check()) {
-                $model->created_by_user = auth()->id();
+                $model->created_by = auth()->id();
             }
         });
 
@@ -53,10 +48,9 @@ class Company extends Model
             // Überprüfen, ob die aktuelle Anfrage von Nova kommt
             if (!Request::is('nova-api*')) {
                 // Hier setzen Sie die tenant_id, die Sie filtern möchten.
-                $tenantId = 1; // Beispielwert
+                $tenantId = 1; 
                 $builder->where('tenant_id', $tenantId);
             }
         });
     }
-
 }

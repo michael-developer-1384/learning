@@ -85,6 +85,13 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class)
+            ->withPivot('is_assigned_to_user', 'is_mandatory', 'valid_from', 'to_be_done_until', 'filter_id')
+            ->withTimestamps();
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -107,14 +114,14 @@ class User extends Authenticatable
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_user');
+        return $this->belongsTo(User::class, 'created_by');
     }
     
     protected static function booted()
     {
         static::creating(function ($model) {
             if (auth()->check()) {
-                $model->created_by_user = auth()->id();
+                $model->created_by = auth()->id();
             }
         });
 

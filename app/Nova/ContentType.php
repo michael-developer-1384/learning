@@ -19,7 +19,7 @@ class ContentType extends Resource
      * @var class-string<\App\Models\ContentType>
      */
     public static $model = \App\Models\ContentType::class;
-    public static $group = 'Learning content';
+    public static $group = 'Types';
     public static $priority = 5;
 
     /**
@@ -51,7 +51,7 @@ class ContentType extends Resource
             Text::make('Name')->sortable()->rules('required'),
             Textarea::make('Description')->rows(3),
             Boolean::make('Is Active', 'is_active')->sortable(),
-            BelongsToMany::make('Lessons')
+            BelongsToMany::make('Modules')
         ];
     }
 

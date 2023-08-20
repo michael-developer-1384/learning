@@ -7,39 +7,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 
-class Path extends Model
+class Filter extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by'];
+    protected $fillable = [
+        'name',
+        'description',
+        'private',
+        'live',
+    ];
 
-    public function pathUnits()
-    {
-        return $this->hasMany(PathUnit::class);
-    }
+    protected $casts = [
+        'private' => 'boolean',
+        'live' => 'boolean',
+    ];
 
-    /* public function children()
-    {
-        return $this->morphToMany('childable', 'path_children')
-                    ->withPivot('order')
-                    ->withTimestamps();
-    }
- */
+    
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
-    protected $casts = [
-        'valid_from' => 'datetime',
-        'valid_until' => 'datetime',
-    ];
-
+    
     protected static function booted()
     {
         static::creating(function ($model) {
@@ -49,7 +48,9 @@ class Path extends Model
         });
 
         static::addGlobalScope('tenant_id', function (Builder $builder) {
+            // Überprüfen, ob die aktuelle Anfrage von Nova kommt
             if (!Request::is('nova-api*')) {
+                // Hier setzen Sie die tenant_id, die Sie filtern möchten.
                 $tenantId = 1; 
                 $builder->where('tenant_id', $tenantId);
             }

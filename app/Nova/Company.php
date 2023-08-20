@@ -57,7 +57,6 @@ class Company extends Resource
             Text::make('Address')->nullable(),
             Text::make('Phone')->nullable(),
             HasMany::make('Users'),
-            BelongsToMany::make('Courses'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
         ];
     }

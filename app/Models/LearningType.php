@@ -20,6 +20,7 @@ class LearningType extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+                    ->withPivot('is_assigned_to_user');
     }
 }
