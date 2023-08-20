@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tenant_id');
+            $table->unsignedBigInteger('learning_path_id');
             $table->unsignedBigInteger('created_by_user')->nullable();
             $table->string('name');
             $table->text('description');

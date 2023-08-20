@@ -5,34 +5,24 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\BelongsToThrough;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Lesson extends Resource
+class PathUnit extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Lesson>
+     * @var class-string<\App\Models\PathUnit>
      */
-    public static $model = \App\Models\Lesson::class;
-    public static $group = 'Learning content';
-    public static $priority = 3;
+    public static $model = \App\Models\PathUnit::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -40,7 +30,7 @@ class Lesson extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'order'
+        'id',
     ];
 
     /**
@@ -52,16 +42,12 @@ class Lesson extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            Text::make('Name'),
-            Textarea::make('Description'),
-            Date::make('Valid From', 'valid_from'),
-            Date::make('Valid Until', 'valid_until'),
-            Boolean::make('Is Active', 'is_active'),
-            Boolean::make('Is Mandatory', 'is_mandatory'),
-            MorphToMany::make('Chapters', 'chapters', Chapter::class),
-            BelongsTo::make('Tenant'),
-            BelongsToMany::make('ContentTypes')
+            ID::make(__('ID'), 'id')->sortable(),
+
+            // ... andere Felder ...
+
+            MorphToMany::make('Courses', 'courses', Course::class),
+            MorphToMany::make('Lessons', 'lessons', Lesson::class),
         ];
     }
 

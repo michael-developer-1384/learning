@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e06a8ddf4c03d5150af5d8959ac5c0d4",
+    "content-hash": "fcfd7d9c4b57ae0d86558a912335a647",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3497,6 +3497,51 @@
                 "source": "https://github.com/Masterminds/html5-php/tree/2.8.1"
             },
             "time": "2023-05-10T11:58:31+00:00"
+        },
+        {
+            "name": "michielkempen/nova-polymorphic-field",
+            "version": "1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michielkempen/nova-polymorphic-field.git",
+                "reference": "bfd6fc931be5f8aff0bc9e749d47ff80e4c2782d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michielkempen/nova-polymorphic-field/zipball/bfd6fc931be5f8aff0bc9e749d47ff80e4c2782d",
+                "reference": "bfd6fc931be5f8aff0bc9e749d47ff80e4c2782d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MichielKempen\\NovaPolymorphicField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MichielKempen\\NovaPolymorphicField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field container allowing to depend on other fields values",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/michielkempen/nova-polymorphic-field/issues",
+                "source": "https://github.com/michielkempen/nova-polymorphic-field/tree/1.0.10"
+            },
+            "time": "2020-05-04T11:50:04+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

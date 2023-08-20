@@ -80,7 +80,6 @@ class OperationalDataSeeder extends Seeder
 
 
 
-
         Tenant::factory()->create([
             'name' => 'SHD',
         ]);
@@ -92,6 +91,7 @@ class OperationalDataSeeder extends Seeder
             'email' => 'admin@test.com',
         ]);
 
+/* 
         // Weisen Sie dem Admin-Benutzer die Rolle "System-Administrator" zu
         $systemAdminRole = Role::where('name', 'System-Administrator')->firstOrFail();
         $admin->roles()->attach($systemAdminRole->id);
@@ -109,6 +109,6 @@ class OperationalDataSeeder extends Seeder
                 return [$permission->id => ['is_active' => (bool)random_int(0, 1)]];
             });
             $role->permissions()->sync($randomPermissions);
-        }
+        } */
     }
 }

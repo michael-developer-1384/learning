@@ -7,39 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 
-class Lesson extends Model
+class LearningUnit extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by'];
 
-    
-    public function pathUnits()
-    {
-        return $this->morphMany(PathUnit::class, 'unit');
-    }
-
-    /* 
-    public function paths()
-    {
-        return $this->morphToMany(Path::class, 'childable', 'path_children')
-                    ->withPivot('order')
-                    ->withTimestamps();
-    } */
 
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
     
-    public function previousLesson()
+    public function previousLearningUnits()
     {
-        return $this->belongsTo(Lesson::class, 'previous_lesson_id');
+        return $this->belongsTo(LearningUnit::class, 'previous_lesson_id');
     }
 
-    public function subsequentLessons()
+    public function subsequentLearningUnits()
     {
-        return $this->hasMany(Lesson::class, 'previous_lesson_id');
+        return $this->hasMany(LearningUnit::class, 'previous_lesson_id');
     }
     
     public function contentTypes()

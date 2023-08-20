@@ -8,10 +8,10 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\MorphToMany;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -51,31 +51,23 @@ class Course extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
 
-            Text::make('Name')->sortable(),
+            ID::make()->sortable(),
+            Text::make('Name'),
             Textarea::make('Description'),
             Date::make('Valid From', 'valid_from'),
             Date::make('Valid Until', 'valid_until'),
             Boolean::make('Is Active', 'is_active'),
-            Boolean::make('Is Mandatory', 'is_mandatory'),
+            Boolean::make('Is Mandatory', 'is_mandatory'),/* 
+            MorphToMany::make('Paths', 'paths', Path::class),
+            MorphToMany::make('Chapters', 'children', Chapter::class), */
             BelongsTo::make('Tenant')->hideFromIndex(),
+            /* BelongsToMany::make('Companies')->hideFromIndex(),
 
             Number::make('Companies')
                 ->displayUsing(function () {
                     return $this->companies->count();
-                })->hideWhenCreating()->hideWhenUpdating(),
-
-            Number::make('Chapters')
-                ->displayUsing(function () {
-                    return $this->chapters->count();
-                })->hideWhenCreating()->hideWhenUpdating(),
-
-            BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
-
-            BelongsTo::make('Learning Path')->hideFromIndex(),
-            HasMany::make('Chapters')->hideFromIndex(),
-            BelongsToMany::make('Companies')->hideFromIndex(),
+                })->hideWhenCreating()->hideWhenUpdating(), */
         ];
     }
 

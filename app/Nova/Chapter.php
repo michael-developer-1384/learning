@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Chapter extends Resource
@@ -49,19 +50,17 @@ class Chapter extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-
-            Text::make('Name')->sortable(),
+            ID::make()->sortable(),
+            Text::make('Name'),
             Textarea::make('Description'),
             Date::make('Valid From', 'valid_from'),
             Date::make('Valid Until', 'valid_until'),
             Boolean::make('Is Active', 'is_active'),
             Boolean::make('Is Mandatory', 'is_mandatory'),
-            Number::make('Order')->onlyOnDetail(),
+            MorphToMany::make('Courses', 'courses', Course::class),
+            MorphToMany::make('Lessons', 'lessons', Lesson::class),
 
-            BelongsTo::make('Course'),
-            BelongsTo::make('Previous Chapter', 'previousChapter', Chapter::class)->onlyOnDetail(),
-            HasMany::make('Lessons'),
+            BelongsTo::make('Tenant'),
         ];
     }
 

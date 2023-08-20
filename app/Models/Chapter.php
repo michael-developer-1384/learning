@@ -11,21 +11,32 @@ class Chapter extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'order', 'tenant_id', 'previous_chapter_id', 'must_complete_previous', 'course_id', 'created_by_user'];
+    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by'];
 
-    public function course()
+
+    public function pathUnits()
     {
-        return $this->belongsTo(Course::class);
+        return $this->morphMany(PathUnit::class, 'unit');
     }
-    
-    public function tenant()
-    {
-        return $this->belongsToThrough(Tenant::class, Course::class);
-    }
+
+    /* 
+    public function paths()
+{
+    return $this->morphToMany(Path::class, 'childable', 'path_children')
+                ->withPivot('order')
+                ->withTimestamps();
+}
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class)->orderBy('order', 'asc');
+        return $this->morphedByMany(Lesson::class, 'childable', 'chapter_children')
+                    ->withPivot('order')
+                    ->withTimestamps();
+    } */
+    
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
     }
 
     public function previousChapter()
@@ -47,7 +58,7 @@ class Chapter extends Model
     {
         static::creating(function ($model) {
             if (auth()->check()) {
-                $model->created_by_user = auth()->id();
+                $model->created_by = auth()->id();
             }
         });
 

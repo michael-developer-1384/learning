@@ -11,16 +11,22 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by_user'];
+    protected $fillable = ['name', 'description', 'valid_from', 'valid_until', 'is_active', 'is_mandatory', 'tenant_id', 'created_by'];
+
+    public function pathUnits()
+    {
+        return $this->morphMany(PathUnit::class, 'unit');
+    }
+
+    /* 
+    public function path_unitable(): MorphMany
+    {
+        return $this->morphMany(PathUnit::class, 'path_unitable');
+    } */
 
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
-    }
-    
-    public function learningPath()
-    {
-        return $this->belongsTo(LearningPath::class);
     }
 
     public function createdBy()
@@ -28,15 +34,10 @@ class Course extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function companies()
+    /* public function companies()
     {
         return $this->belongsToMany(Company::class);
-    }
-
-    public function chapters()
-    {
-        return $this->hasMany(Chapter::class)->orderBy('order', 'asc');
-    }
+    } */
 
     public function users()
     {
@@ -52,7 +53,7 @@ class Course extends Model
     {
         static::creating(function ($model) {
             if (auth()->check()) {
-                $model->created_by_user = auth()->id();
+                $model->created_by = auth()->id();
             }
         });
 

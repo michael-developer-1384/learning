@@ -6,15 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Create Users Table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tenant_id')->nullable();
-            $table->unsignedBigInteger('company_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -29,20 +25,36 @@ return new class extends Migration
             $table->date('start_date')->nullable();
         
             $table->timestamps();
+        });
 
+        // Create Tenants Table
+        Schema::create('tenants', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('phone')->nullable();
+            $table->timestamps();
+        });
+
+        // Add Foreign Keys to User
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('tenant_id')->after('id');
+            $table->unsignedBigInteger('created_by')->after('tenant_id');
             $table->foreign('tenant_id')->references('id')->on('tenants');
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('created_by')->references('id')->on('users');
+        });
+    
+        // Add Foreign Keys to Tenant
+        Schema::table('tenants', function (Blueprint $table) {
+            $table->unsignedBigInteger('created_by')->nullable()->after('id');
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id', 'tenant_id', 'company_id']);
-            $table->dropColumn(['role_id', 'tenant_id', 'company_id']);
-        });
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('tenants');
     }
 };
