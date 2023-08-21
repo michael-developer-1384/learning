@@ -35,11 +35,12 @@ class Tenant extends Model
     protected static function booted()
     {
         static::created(function ($tenant) {
+
             foreach (Department::DEPARTMENT_NAMES as $name) {
                 Department::create([
                     'name' => $name,
                     'tenant_id' => $tenant->id,
-                    'created_by' => $tenant->created_by ?? 1
+                    'created_by' => auth()->id() ?? 1
                 ]);
             }
             
@@ -47,9 +48,29 @@ class Tenant extends Model
                 Position::create([
                     'name' => $positionName,
                     'tenant_id' => $tenant->id,
-                    'created_by' => $tenant->created_by ?? 1
+                    'created_by' => auth()->id() ?? 1
                 ]);
             }
+
+            // Erstellen Sie zuerst alle Berechtigungen
+            foreach (Permission::PERMISSIONS as $permission => $details) {
+                Permission::create([
+                    'name' => $permission, 
+                    'description' => $details['description'],
+                    'category' => $details['category'],
+                ]);
+            }
+    
+            // Erstellen Sie dann die Rollen und weisen Sie ihnen Berechtigungen zu
+            foreach (Role::PREDEFINED_ROLES as $roleName => $permissions) {
+                $role = Role::create([
+                    'name' => $roleName,
+                    'tenant_id' => $tenant->id,
+                    'created_by' => auth()->id() ?? 1]
+                );
+                $role->givePermissionTo($permissions);
+            }
+
         });
     }
 }

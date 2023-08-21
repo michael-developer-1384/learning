@@ -12,6 +12,8 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MorphToMany;
+
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
@@ -83,11 +85,9 @@ class User extends Resource
             BelongsToMany::make('LearningTypes'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
 
-            Text::make('Roles')
-                ->displayUsing(function () {
-                    return $this->roles->pluck('name')->implode(', ');
-                })
-                ->onlyOnIndex(),
+            MorphToMany::make('Roles', 'roles', \Itsmejoshua\Novaspatiepermissions\Role::class),
+            MorphToMany::make('Permissions', 'permissions', \Itsmejoshua\Novaspatiepermissions\Permission::class),
+    
                 
             BelongsToMany::make('Positions')
                 ->fields(function () {

@@ -4,12 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Tenant;
 use App\Models\User;
-use App\Models\Role;
-use App\Models\Permission;
 use App\Models\LearningType;
 use App\Models\ContentType;
 
 use Illuminate\Database\Seeder;
+
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class OperationalDataSeeder extends Seeder
 {
@@ -27,7 +30,7 @@ class OperationalDataSeeder extends Seeder
         foreach (Role::ROLE_NAMES as $role) {
             Role::create(['name' => $role]);
         } */
-
+/* 
         foreach (LearningType::LEARNING_TYPES as $type => $isActive) {
             LearningType::create([
                 'name' => $type,
@@ -43,7 +46,7 @@ class OperationalDataSeeder extends Seeder
         }
 
 
-
+ */
 
 
 
@@ -61,6 +64,25 @@ class OperationalDataSeeder extends Seeder
 
         $admin->tenant_id = $tenant->id;
         $admin->save();
+        
+        $role = Role::create(['name' => 'Super Admin', 'tenant_id' => 1, 'created_by' => 1]);
+        $permissions = Permission::all()->pluck('name');
+        $role->givePermissionTo($permissions);
+
+        $admin->assignRole('Super Admin');
+/* 
+        // Create Roles
+        $role1 = Role::create(['name' => 'System-Administrator', 'tenant_id' => 1, 'created_by' => 1]);
+        $role2 = Role::create(['name' => 'Administrator', 'tenant_id' => 1, 'created_by' => 1]);
+        $role3 = Role::create(['name' => 'Editor', 'tenant_id' => 1, 'created_by' => 1]);
+        $role4 = Role::create(['name' => 'Author', 'tenant_id' => 1, 'created_by' => 1]);
+        $role5 = Role::create(['name' => 'Student', 'tenant_id' => 1, 'created_by' => 1]);
+        $role6 = Role::create(['name' => 'Guest', 'tenant_id' => 1, 'created_by' => 1]);
+ */
+        /* $permission->assignRole($role1);
+        $admin->assignRole('Administrator'); */
+
+
 
         /*
         // Weisen Sie dem Admin-Benutzer die Rolle "System-Administrator" zu

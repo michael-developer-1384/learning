@@ -5,25 +5,38 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+use Spatie\Permission\Models\Permission as SpatiePermission;
+
+class Permission extends SpatiePermission
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'category', 'is_active'];
+    protected $fillable = ['name'];
 
-    const CATEGORIES = [
-        'Course',
-        'User',
-        'Report',
-        'Billing',
-        'Settings',
-        'Content',
-        'Analytics',
-        'Communication',
+    const PERMISSIONS = [
+        'view_courses' => ['description' => 'View courses', 'category' => 'Courses'],
+        'create_courses' => ['description' => 'Create new courses', 'category' => 'Courses'],
+        'edit_courses' => ['description' => 'Edit existing courses', 'category' => 'Courses'],
+        'delete_courses' => ['description' => 'Delete courses', 'category' => 'Courses'],
+
+        'enroll_students' => ['description' => 'Enroll students to courses', 'category' => 'Enrollments'],
+        'view_enrollments' => ['description' => 'View course enrollments', 'category' => 'Enrollments'],
+
+        'view_assignments' => ['description' => 'View assignments', 'category' => 'Assignments'],
+        'grade_assignments' => ['description' => 'Grade student assignments', 'category' => 'Assignments'],
+
+        'manage_users' => ['description' => 'Manage system users', 'category' => 'Users'],
+        'view_reports' => ['description' => 'View LMS reports', 'category' => 'Reports'],
     ];
-
-    public function roles()
+    
+    protected static function booted()
     {
-        return $this->belongsToMany(Role::class)->withPivot('is_active');
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->created_by = auth()->id();
+            }
+        });
     }
+
+    
 }

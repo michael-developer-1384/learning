@@ -11,7 +11,9 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
+
 use Spatie\Tags\HasTags;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
@@ -21,7 +23,9 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
     use HasTags;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -85,11 +89,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Module::class)
             ->withPivot('is_assigned_to_user', 'is_mandatory', 'valid_from', 'to_be_done_until', 'filter_id')
             ->withTimestamps();
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
     }
 
     public function learningTypes()
