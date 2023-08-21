@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tenantAndCreatedBy();
             $table->foreignId('filter_id')->constrained()->onDelete('cascade');
             $table->enum('model', ['User', 'Company', 'Department', 'LearningType', 'Position', 'Role']); // z.B. 'User', 'Post', etc.
+            $table->string('column');
             $table->enum('operator', ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN']); // Liste der verfügbaren Operatoren
             $table->string('value'); // Der Wert, gegen den gefiltert wird
             $table->enum('chain_operator', ['AND', 'OR'])->nullable(); // Verkettungsoperator für das nächste Kriterium

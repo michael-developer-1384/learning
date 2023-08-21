@@ -12,6 +12,9 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
+use App\Nova\Actions\ProcessFilter;
+
+
 class Filter extends Resource
 {
     /**
@@ -110,6 +113,8 @@ class Filter extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new ProcessFilter,
+        ];
     }
 }
