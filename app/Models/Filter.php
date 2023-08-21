@@ -38,6 +38,12 @@ class Filter extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function criteria()
+    {
+        return $this->hasMany(FilterCriterion::class);
+    }
+
     
     protected static function booted()
     {

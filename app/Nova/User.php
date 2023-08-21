@@ -75,7 +75,7 @@ class User extends Resource
                 ->updateRules('nullable', Rules\Password::defaults()),
 
             BelongsTo::make('Tenant')->onlyOnDetail(),
-            BelongsTo::make('Company')->nullable(),
+            BelongsToMany::make('Companies')->nullable(),
             Text::make('Phone')->nullable()->onlyOnDetail(),
             Text::make('Address')->nullable()->onlyOnDetail(),
             Text::make('Tags'),

@@ -48,7 +48,6 @@ class Company extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('Tenant')->onlyOnDetail(),
             Text::make('Name')->sortable()->rules('required'),
             Text::make('Description')->nullable()->onlyOnDetail(),
             Text::make('Email')->onlyOnDetail()->sortable()->rules('nullable', 'email', 'max:254')
@@ -56,8 +55,8 @@ class Company extends Resource
                 ->updateRules('unique:companies,email,{{resourceId}}'),
             Text::make('Address')->nullable(),
             Text::make('Phone')->nullable(),
-            HasMany::make('Users'),
-            BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
+            BelongsToMany::make('Users')->nullable(),
+            BelongsTo::make('Tenant')->onlyOnForms(),
         ];
     }
 

@@ -38,4 +38,23 @@ class Position extends Model
         'start_date' => 'date',
     ];
 
+    
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->created_by = auth()->id();
+            }
+        });
+
+        static::addGlobalScope('tenant_id', function (Builder $builder) {
+            // Überprüfen, ob die aktuelle Anfrage von Nova kommt
+            if (!Request::is('nova-api*')) {
+                // Hier setzen Sie die tenant_id, die Sie filtern möchten.
+                $tenantId = 1; 
+                $builder->where('tenant_id', $tenantId);
+            }
+        });
+    }
+
 }

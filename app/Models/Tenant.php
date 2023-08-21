@@ -38,14 +38,16 @@ class Tenant extends Model
             foreach (Department::DEPARTMENT_NAMES as $name) {
                 Department::create([
                     'name' => $name,
-                    'tenant_id' => $tenant->id
+                    'tenant_id' => $tenant->id,
+                    'created_by' => $tenant->created_by ?? 1
                 ]);
             }
             
             foreach (Position::POSITION_NAMES as $positionName) {
                 Position::create([
                     'name' => $positionName,
-                    'tenant_id' => $tenant->id
+                    'tenant_id' => $tenant->id,
+                    'created_by' => $tenant->created_by ?? 1
                 ]);
             }
         });

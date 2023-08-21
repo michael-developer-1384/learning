@@ -80,11 +80,6 @@ class User extends Authenticatable
         return $this->belongsTo(Tenant::class);
     }
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
     public function modules()
     {
         return $this->belongsToMany(Module::class)
@@ -102,14 +97,19 @@ class User extends Authenticatable
         return $this->belongsToMany(LearningType::class);
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class)->withPivot('start_date')->withTimestamps();
+    }
+
     public function departments()
     {
-        return $this->belongsToMany(Department::class)->withPivot('start_date');
+        return $this->belongsToMany(Department::class)->withPivot('start_date')->withTimestamps();
     }
 
     public function positions()
     {
-        return $this->belongsToMany(Position::class)->withPivot('start_date');
+        return $this->belongsToMany(Position::class)->withPivot('start_date')->withTimestamps();
     }
 
     public function createdBy()

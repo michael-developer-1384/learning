@@ -48,20 +48,21 @@ class OperationalDataSeeder extends Seeder
 
 
 
+        // Erstellen Sie einen Admin-Benutzer
+        $admin = User::factory()->create([
+            'tenant_id' => null,
+            'name' => 'admin',
+            'email' => 'admin@test.com',
+        ]); 
 
-
-        Tenant::factory()->create([
+        $tenant = Tenant::factory()->create([
             'name' => 'SHD',
         ]);
 
-        // Erstellen Sie einen Admin-Benutzer
-        $admin = User::factory()->create([
-            'tenant_id' => 1,
-            'name' => 'admin',
-            'email' => 'admin@test.com',
-        ]);
+        $admin->tenant_id = $tenant->id;
+        $admin->save();
 
-/* 
+        /*
         // Weisen Sie dem Admin-Benutzer die Rolle "System-Administrator" zu
         $systemAdminRole = Role::where('name', 'System-Administrator')->firstOrFail();
         $admin->roles()->attach($systemAdminRole->id);

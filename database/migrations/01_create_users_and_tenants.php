@@ -11,6 +11,8 @@ return new class extends Migration
         // Create Users Table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tenant_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -30,6 +32,7 @@ return new class extends Migration
         // Create Tenants Table
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('email')->unique()->nullable();
@@ -39,15 +42,14 @@ return new class extends Migration
 
         // Add Foreign Keys to User
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('tenant_id')->after('id');
-            $table->unsignedBigInteger('created_by')->after('tenant_id');
+            
             $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->foreign('created_by')->references('id')->on('users');
         });
     
         // Add Foreign Keys to Tenant
         Schema::table('tenants', function (Blueprint $table) {
-            $table->unsignedBigInteger('created_by')->nullable()->after('id');
+            
             $table->foreign('created_by')->references('id')->on('users');
         });
     }

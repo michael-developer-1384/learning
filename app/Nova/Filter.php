@@ -8,6 +8,8 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Filter extends Resource
@@ -61,7 +63,9 @@ class Filter extends Resource
             Boolean::make('Live')
                 ->sortable(),
 
-            BelongsTo::make('Tenant'),
+            BelongsTo::make('Tenant')->onlyOnForms(),
+
+            HasMany::make('Criteria', 'criteria', FilterCriterion::class),
         ];
     }
 

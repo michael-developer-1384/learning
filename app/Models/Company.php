@@ -27,14 +27,17 @@ class Company extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('start_date')->withTimestamps();
     }
 
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
+    
+    protected $casts = [
+        'start_date' => 'date',
+    ];
 
     protected static function booted()
     {

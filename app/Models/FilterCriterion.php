@@ -4,44 +4,40 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Request;
 
-class Department extends Model
+
+class FilterCriterion extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['name', 'description', 'tenant_id'];
-
-    const DEPARTMENT_NAMES = [
-        'Human Resources',
-        'Finance & Accounting',
-        'Marketing',
-        'Sales',
-        'Research & Development',
-        'Information Technology',
-        'Operations',
-        'Customer Service',
-        'Logistics & Supply Chain',
-        'Legal',
-        'Public Relations',
-        'Procurement',
-        'Administration',
-        'Production or Manufacturing',
-        'Quality Assurance'
+    protected $table = 'filter_criteria';
+    
+    protected $fillable = [
+        'filter_id',
+        'model',
+        'operator',
+        'value',
+        'chain_operator',
+        'sort_order',
+        'group_start',
+        'group_end',
     ];
 
+    public function filter()
+    {
+        return $this->belongsTo(Filter::class);
+    }
+    
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class)->withPivot('start_date');
+        return $this->belongsTo(User::class);
     }
-
-    protected $casts = [
-        'start_date' => 'date',
-    ];
     
     protected static function booted()
     {
