@@ -50,7 +50,7 @@ class Role extends SpatieRole
     {
         return $this->belongsTo(Tenant::class);
     }
-
+/* 
     
     protected static function booted()
     {
@@ -59,5 +59,5 @@ class Role extends SpatieRole
                 $model->created_by = auth()->id();
             }
         });
-    }
+    } */
 }

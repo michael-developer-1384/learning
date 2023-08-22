@@ -56,6 +56,11 @@ class Role extends Resource
         ];
     }
 
+    public function creating(NovaRequest $request)
+    {
+        $this->model_type = User::class;
+    }
+
     /**
      * Get the cards available for the request.
      *
