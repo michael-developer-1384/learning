@@ -48,12 +48,12 @@ class FilterCriterion extends Resource
             ID::make()->sortable(),
             BelongsTo::make('Filter'),
 
-            Select::make('Chain Operator')
+            Select::make('Model')
                 ->options([
                     'User' => 'User',
                     'Company' => 'Company',
                     'Department' => 'Department',
-                    'LearningType' => 'Learning Type',
+                    'LearningType' => 'LearningType',
                     'Position' => 'Position',
                     'Role' => 'Role',
                 ])
@@ -75,6 +75,10 @@ class FilterCriterion extends Resource
                 ])
                 ->rules('required')
                 ->help('The operator used for filtering.'),
+                
+            Text::make('Column')
+                ->rules('required')
+                ->help('The column against which filtering is done.'),
 
             Text::make('Value')
                 ->rules('required')
