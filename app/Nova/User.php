@@ -82,6 +82,7 @@ class User extends Resource
             Text::make('Address')->nullable()->onlyOnForms(),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
             BelongsToMany::make('LearningTypes'),
+            BelongsToMany::make('Roles'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
                 
             BelongsToMany::make('Positions')

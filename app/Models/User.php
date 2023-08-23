@@ -111,6 +111,22 @@ class User extends Authenticatable
         return $this->belongsToMany(Position::class)->withPivot('start_date')->withTimestamps();
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class); 
+
+    }
+
+    public function hasPermission(Permission $permission)
+    {
+        return $this->roles->flatMap->permissions->contains($permission);
+    }
+
+    public function getAllPermissions()
+    {
+        return $this->roles->flatMap->permissions->unique('id');
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

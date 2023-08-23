@@ -50,6 +50,24 @@ class Tenant extends Model
                     'created_by' => auth()->id() ?? 1
                 ]);
             }
+
+            foreach (Role::PREDEFINED_ROLES as $roleName => $roleData) {
+                $role = Role::create([
+                    'tenant_id' => $tenant->id,
+                    'name' => $roleName,
+                ]);
+        
+                $permissions = Permission::whereIn('name', $roleData['permissions'])->get();
+        
+                // Bereiten Sie die Daten für die Pivot-Tabelle vor, einschließlich der tenant_id
+                $pivotData = [];
+                foreach ($permissions as $permission) {
+                    $pivotData[$permission->id] = ['tenant_id' => $tenant->id];
+                }
+        
+                // Verwenden Sie sync() anstelle von attach(), um die Pivot-Daten zu übergeben
+                $role->permissions()->sync($pivotData);
+            }
         });
     }
 }

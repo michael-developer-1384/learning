@@ -9,7 +9,6 @@ use App\Models\ContentType;
 
 use Illuminate\Database\Seeder;
 
-
 use App\Models\Role;
 use App\Models\Permission;
 
@@ -27,6 +26,15 @@ class OperationalDataSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@test.com',
         ]); 
+
+        
+        foreach (Permission::PERMISSIONS as $permission) {
+            Permission::create([
+                'name' => $permission['name'],
+                'description' => $permission['description'],
+                'category' => $permission['category'],
+            ]);
+        }
 
 
         $tenant = Tenant::factory()->create([
