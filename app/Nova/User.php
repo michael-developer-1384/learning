@@ -68,7 +68,7 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
-                ->onlyOnDetail()
+                ->onlyOnForms()
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
             Password::make('Password')
@@ -76,11 +76,10 @@ class User extends Resource
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
-            BelongsTo::make('Tenant')->onlyOnDetail(),
+            BelongsTo::make('Tenant')->onlyOnForms(),
             BelongsToMany::make('Companies')->nullable(),
-            Text::make('Phone')->nullable()->onlyOnDetail(),
-            Text::make('Address')->nullable()->onlyOnDetail(),
-            Text::make('Tags'),
+            Text::make('Phone')->nullable()->onlyOnForms(),
+            Text::make('Address')->nullable()->onlyOnForms(),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
             BelongsToMany::make('Roles'),
             BelongsToMany::make('LearningTypes'),

@@ -16,6 +16,7 @@ class FilterCriterion extends Model
     protected $fillable = [
         'filter_id',
         'model',
+        'column',
         'operator',
         'value',
         'chain_operator',
