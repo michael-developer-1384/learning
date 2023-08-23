@@ -81,13 +81,8 @@ class User extends Resource
             Text::make('Phone')->nullable()->onlyOnForms(),
             Text::make('Address')->nullable()->onlyOnForms(),
             Date::make('Date Of Birth', 'date_of_birth')->nullable()->onlyOnDetail(),
-            BelongsToMany::make('Roles'),
             BelongsToMany::make('LearningTypes'),
             BelongsTo::make('Created By', 'createdBy', User::class)->onlyOnDetail(),
-
-            MorphToMany::make('Roles', 'roles', \Itsmejoshua\Novaspatiepermissions\Role::class),
-            MorphToMany::make('Permissions', 'permissions', \Itsmejoshua\Novaspatiepermissions\Permission::class),
-    
                 
             BelongsToMany::make('Positions')
                 ->fields(function () {

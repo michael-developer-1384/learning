@@ -28,17 +28,6 @@ class OperationalDataSeeder extends Seeder
             'email' => 'admin@test.com',
         ]); 
 
-        
-        
-        // Erstellen Sie zuerst alle Berechtigungen
-        foreach (Permission::PERMISSIONS as $permission => $details) {
-            Permission::create([
-                'name' => $permission, 
-                'description' => $details['description'],
-                'category' => $details['category'],
-            ]);
-        }
-
 
         $tenant = Tenant::factory()->create([
             'name' => 'SHD',
@@ -47,11 +36,5 @@ class OperationalDataSeeder extends Seeder
         $admin->tenant_id = $tenant->id;
         $admin->save();
         
-        $role = Role::create(['tenant_id' => 1, 'name' => 'Super Admin']);
-        $permissions = Permission::all()->pluck('name');
-        $role->givePermissionTo($permissions);
-
-        setPermissionsTeamId(1);
-        $admin->assignRole('Super Admin');
     }
 }

@@ -91,7 +91,6 @@ class Filter extends Resource
     public function filters(NovaRequest $request)
     {
         return [
-            new ProcessFilter,
         ];
     }
 
@@ -114,6 +113,8 @@ class Filter extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new ProcessFilter,
+        ];
     }
 }

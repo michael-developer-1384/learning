@@ -103,7 +103,6 @@ return [
         HandleInertiaRequests::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
-        \Itsmejoshua\Novaspatiepermissions\ForgetCachedPermissions::class,
     ],
 
     'api_middleware' => [

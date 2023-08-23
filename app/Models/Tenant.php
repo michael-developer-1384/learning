@@ -25,7 +25,6 @@ class Tenant extends Model
     {
         return $this->hasMany(Company::class);
     }
-
     
     public function departments()
     {
@@ -51,16 +50,6 @@ class Tenant extends Model
                     'created_by' => auth()->id() ?? 1
                 ]);
             }
-
-            // Erstellen Sie dann die Rollen und weisen Sie ihnen Berechtigungen zu
-            foreach (Role::PREDEFINED_ROLES as $roleName => $permissions) {
-                $role = Role::create([
-                    'name' => $roleName,
-                    'tenant_id' => $tenant->id
-                ]);
-                $role->givePermissionTo($permissions);
-            }
-
         });
     }
 }
